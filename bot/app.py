@@ -27,8 +27,11 @@ async def main():
     logging.basicConfig(level="DEBUG", stream=sys.stdout)
 
     bot = Bot(token=os.getenv('TOKEN'), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    await bot.delete_webhook(drop_pending_updates=True)  # пропуск сообщения пока бот был оффлайн
+
     dp = Dispatcher()
     include_all_routers(dp)  # подключение роутеров
+
 
     logger.info("Start polling...")
     await dp.start_polling(bot)

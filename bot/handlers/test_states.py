@@ -1,16 +1,16 @@
 import logging
 from typing import Any, Dict
 
-from aiogram import Dispatcher, Router, F, html
+from aiogram import Router, F, html
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from aiogram.filters import Command, Filter
+from aiogram.filters import Command
 from aiogram.types import (
-    KeyboardButton,
     Message,
-    ReplyKeyboardMarkup,
     ReplyKeyboardRemove,  # чистка клавиатуры
 )
+
+from bot.keyboards.reply import get_yes_no_kb
 
 form_router = Router()
 logger = logging.getLogger(__name__)
@@ -55,15 +55,7 @@ async def process_name(message: Message, state: FSMContext) -> None:
     await state.set_state(Form.like_bots)
     await message.answer(
         f"Nice to meet you, {html.quote(message.text)}!\nDid you like to write bots?",
-        reply_markup=ReplyKeyboardMarkup(
-            keyboard=[
-                [
-                    KeyboardButton(text="Yes"),
-                    KeyboardButton(text="No"),
-                ]
-            ],
-            resize_keyboard=True,
-        ),
+        reply_markup=get_yes_no_kb()
     )
 
 
@@ -96,7 +88,6 @@ async def process_unknown_write_bots(message: Message) -> None:
 @form_router.message(Form.language)
 async def process_language(message: Message, state: FSMContext) -> None:
     data = await state.update_data(language=message.text)
-    logger.debug(f"data: {data}")
     await state.clear()
 
     if message.text.casefold() == "python":

@@ -13,10 +13,13 @@ common_router = Router()
 logger = logging.getLogger(__name__)
 
 class MyFilter(Filter):
+    """
+    Собственный фильтр в котором можно обработать всё необходимое
+    """
     def __init__(self, my_text: str) -> None:
         self.my_text = my_text
 
-    async def __call__(self, message: Message) -> bool:
+    async def __call__(self, message: Message) -> bool:  # вызывается роутером для проверки соответствия
         return message.text == self.my_text
 
 
