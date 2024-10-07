@@ -1,13 +1,12 @@
 import logging
 
-from aiogram import Dispatcher, Router, F
+from aiogram import Router, F
 from aiogram.filters import Command, Filter
 from aiogram.types import (
-    KeyboardButton,
     Message,
-    ReplyKeyboardMarkup,
-    ReplyKeyboardRemove,
 )
+
+from bot.template_engine import engine
 
 common_router = Router()
 logger = logging.getLogger(__name__)
@@ -25,17 +24,21 @@ class MyFilter(Filter):
 
 @common_router.message(Command("start"))
 async def start_handler(message: Message) -> None:
+    await message.answer(engine.render_template(
+        "start",
+        user_name=message.from_user.first_name,
+        bot_name="Bot"
+    ))
     logger.debug(f"Sent answer to /start command. To user {message.from_user.username}")
-    await message.answer("hello world!")
 
 
 @common_router.message(MyFilter("hello"))
 async def hello_handler(message: Message) -> None:
-    logger.debug(f"Sent answer to <hello>. To user {message.from_user.username}")
     await message.answer("hi")
+    logger.debug(f"Sent answer to <hello>. To user {message.from_user.username}")
 
 
 @common_router.message(F.text.regexp(r"^(\d+)$"))
 async def any_digits_handler(message: Message) -> None:
-    logger.debug(f"Sent answer to digit message. To user {message.from_user.username}")
     await message.answer("This is digits!")
+    logger.debug(f"Sent answer to digit message. To user {message.from_user.username}")
