@@ -9,22 +9,13 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
 from dotenv import load_dotenv, find_dotenv
-from handlers.common import register_handlers_common
-from handlers.test_states import register_handlers_form
+from handlers import include_all_routers
 
 
-VERSION = "1.0.2"
+VERSION = "1.0.3"
 load_dotenv(find_dotenv())
 
 logger = logging.getLogger(__name__)
-
-
-def register_all_handlers(dp: Dispatcher):
-    """
-    Регистрация всех обработчиков сообщений и команд.
-    """
-    # register_handlers_common(dp)
-    register_handlers_form(dp)
 
 
 async def main():
@@ -37,7 +28,7 @@ async def main():
 
     bot = Bot(token=os.getenv('TOKEN'), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher()
-    register_all_handlers(dp)
+    include_all_routers(dp)  # подключение роутеров
 
     logger.info("Start polling...")
     await dp.start_polling(bot)

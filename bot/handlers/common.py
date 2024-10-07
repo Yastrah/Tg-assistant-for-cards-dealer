@@ -9,7 +9,7 @@ from aiogram.types import (
     ReplyKeyboardRemove,
 )
 
-router = Router()
+common_router = Router()
 logger = logging.getLogger(__name__)
 
 class MyFilter(Filter):
@@ -20,26 +20,19 @@ class MyFilter(Filter):
         return message.text == self.my_text
 
 
+@common_router.message(Command("start"))
 async def start_handler(message: Message) -> None:
     logger.debug(f"Sent answer to /start command. To user {message.from_user.username}")
     await message.answer("hello world!")
 
 
+@common_router.message(MyFilter("hello"))
 async def hello_handler(message: Message) -> None:
     logger.debug(f"Sent answer to <hello>. To user {message.from_user.username}")
     await message.answer("hi")
 
 
+@common_router.message(F.text.regexp(r"^(\d+)$"))
 async def any_digits_handler(message: Message) -> None:
     logger.debug(f"Sent answer to digit message. To user {message.from_user.username}")
     await message.answer("This is digits!")
-
-
-# router.message.register(my_handler, Command("my_command"), MyFilter())
-def register_handlers_common(dp: Dispatcher):
-    router.message.register(start_handler, Command("start"))
-    router.message.register(hello_handler, MyFilter("hello"))
-    router.message.register(any_digits_handler, F.text.regexp(r"^(\d+)$"))
-    # dp.register_message_handler(cmd_start, commands="start", state="*")
-
-    dp.include_router(router)

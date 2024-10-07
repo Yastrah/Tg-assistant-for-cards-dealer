@@ -9,7 +9,7 @@ from aiogram.types import (
     KeyboardButton,
     Message,
     ReplyKeyboardMarkup,
-    ReplyKeyboardRemove,
+    ReplyKeyboardRemove,  # чистка клавиатуры
 )
 
 form_router = Router()
@@ -22,17 +22,17 @@ class Form(StatesGroup):
     language = State()
 
 
-@form_router.message(Command("start"))
+@form_router.message(Command("form"))
 async def command_start(message: Message, state: FSMContext) -> None:
     await state.set_state(Form.name)
     await message.answer(
         "Hi there! What's your name?",
-        reply_markup=ReplyKeyboardRemove(),
+        reply_markup=ReplyKeyboardRemove(),  # удаление клавиатуры если она была
     )
 
 
 @form_router.message(Command("cancel"))
-@form_router.message(F.text.casefold() == "cancel")
+@form_router.message(F.text.casefold() == "cancel")  # casefold - приведение к нижнему регистру
 async def cancel_handler(message: Message, state: FSMContext) -> None:
     """
     Allow user to cancel any action
@@ -51,7 +51,7 @@ async def cancel_handler(message: Message, state: FSMContext) -> None:
 
 @form_router.message(Form.name)
 async def process_name(message: Message, state: FSMContext) -> None:
-    await state.update_data(name=message.text)
+    await state.update_data(name=message.text)  # сохранение имени
     await state.set_state(Form.like_bots)
     await message.answer(
         f"Nice to meet you, {html.quote(message.text)}!\nDid you like to write bots?",
@@ -88,7 +88,7 @@ async def process_like_write_bots(message: Message, state: FSMContext) -> None:
     )
 
 
-@form_router.message(Form.like_bots)
+@form_router.message(Form.like_bots)  # не ответил с помощью клавиатуры
 async def process_unknown_write_bots(message: Message) -> None:
     await message.reply("I don't understand you :(")
 
@@ -96,6 +96,7 @@ async def process_unknown_write_bots(message: Message) -> None:
 @form_router.message(Form.language)
 async def process_language(message: Message, state: FSMContext) -> None:
     data = await state.update_data(language=message.text)
+    logger.debug(f"data: {data}")
     await state.clear()
 
     if message.text.casefold() == "python":
@@ -116,7 +117,3 @@ async def show_summary(message: Message, data: Dict[str, Any], positive: bool = 
         else "you don't like to write bots, so sad..."
     )
     await message.answer(text=text, reply_markup=ReplyKeyboardRemove())
-
-
-def register_handlers_form(dp: Dispatcher):
-    dp.include_router(form_router)
