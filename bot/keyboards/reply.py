@@ -3,6 +3,9 @@ from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
 def get_yes_no_kb() -> ReplyKeyboardMarkup:
+    """
+    Клавиатура с кнопками Да и Нет
+    """
     kb = ReplyKeyboardBuilder()
     kb.button(text="Yes")
     kb.button(text="No")

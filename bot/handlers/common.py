@@ -7,6 +7,8 @@ from aiogram.types import (
 )
 
 from bot.template_engine import engine
+from bot.config import settings
+
 
 common_router = Router()
 logger = logging.getLogger(__name__)
@@ -27,7 +29,7 @@ async def start_handler(message: Message) -> None:
     await message.answer(engine.render_template(
         "start",
         user_name=message.from_user.first_name,
-        bot_name="Bot"
+        bot_name=settings.bot.name
     ))
     logger.debug(f"Sent answer to /start command. To user {message.from_user.username}")
 

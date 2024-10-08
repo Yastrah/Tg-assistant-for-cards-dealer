@@ -3,16 +3,17 @@ import logging
 import os
 import sys
 import datetime
+from dotenv import load_dotenv, find_dotenv
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
-from dotenv import load_dotenv, find_dotenv
-from handlers import include_all_routers
+from bot.handlers import include_all_routers
+from bot.config import settings
 
 
-VERSION = "1.0.3"
+VERSION = "1.0.4"
 load_dotenv(find_dotenv())
 
 logger = logging.getLogger(__name__)
@@ -24,7 +25,11 @@ async def main():
     # logging.basicConfig(filename=f"logs/bot_logs_{datetime.datetime.now().strftime('%Y_%m_%d')}.log",
     #                     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s", level="DEBUG",
     #                     datefmt="%Y-%m-%d %H:%M:%S", filemode='a')
-    logging.basicConfig(level="DEBUG", stream=sys.stdout)
+    logging.basicConfig(
+        format=settings.logging.format,
+        datefmt=settings.logging.datefmt,
+        level="DEBUG" if settings.logging.debug else "INFO",
+        stream=sys.stdout)
 
     bot = Bot(token=os.getenv('TOKEN'), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     await bot.delete_webhook(drop_pending_updates=True)  # пропуск сообщения пока бот был оффлайн
