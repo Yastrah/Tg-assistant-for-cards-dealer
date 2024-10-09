@@ -6,6 +6,7 @@ from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 
 from bot.keyboards.reply import main_menu_kb
+from bot.keyboards.inline import join_create_group
 from bot.template_engine import engine
 from bot.config import settings
 
@@ -23,6 +24,6 @@ async def start_handler(message: Message, state: FSMContext) -> None:
         user_name=message.from_user.username,
         bot_name=settings.bot.name
     ),
-        reply_markup=main_menu_kb())
+        reply_markup=join_create_group())
     logger.debug(f"Sent answer to /start command. To user {message.from_user.username}")
 
