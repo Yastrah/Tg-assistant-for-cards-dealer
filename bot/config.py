@@ -2,6 +2,11 @@ import configparser
 from dataclasses import dataclass
 
 
+def convertToBool(val: str) -> bool:
+    if val.lower() in ["0", "false"]:
+        return False
+    return True
+
 @dataclass
 class Bot:
     name: str
@@ -28,7 +33,7 @@ class Settings:
         return Bot(
             name=bot_conf["name"],
             admin_id=list(map(int, bot_conf["admin_id"].split())),
-            use_redis=bot_conf["use_redis"],
+            use_redis=convertToBool(bot_conf["use_redis"]),
         )
 
     @property
@@ -38,7 +43,7 @@ class Settings:
         return Logging(
             format=logging_conf["format"],
             datefmt=logging_conf["datefmt"],
-            debug=logging_conf["debug"],
+            debug=convertToBool(logging_conf["debug"]),
         )
 
 settings = Settings("bot.ini")

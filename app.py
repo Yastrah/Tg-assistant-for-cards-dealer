@@ -13,7 +13,7 @@ from bot.handlers import include_all_routers
 from bot.config import settings
 
 
-VERSION = "1.0.4"
+VERSION = "1.0.5"
 load_dotenv(find_dotenv())
 
 logger = logging.getLogger(__name__)
