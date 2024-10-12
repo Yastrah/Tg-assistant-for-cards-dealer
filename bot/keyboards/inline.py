@@ -7,10 +7,10 @@ def join_create_group() -> InlineKeyboardMarkup:
     Клавиатура для вступления/создания группы
     """
     kb = InlineKeyboardBuilder()
-    kb.row(InlineKeyboardButton(
-        text="создать группу", callback_data='create_group')
-    )
-    kb.row(InlineKeyboardButton(
-        text="вступить в группу", callback_data='join_group')
-    )
+    # kb.row(InlineKeyboardButton(
+    #     text="создать группу", callback_data='create_group')
+    # )
+    kb.button(text="создать группу", callback_data='create_group')
+    kb.button(text="вступить в группу", callback_data='join_group')
+    kb.adjust(1)
     return kb.as_markup()

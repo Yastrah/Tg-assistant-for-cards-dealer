@@ -19,5 +19,8 @@ def main_menu_kb() -> ReplyKeyboardMarkup:
     Клавиатура главного меню(основная)
     """
     kb = ReplyKeyboardBuilder()
-    # write
+    kb.button(text="Профиль")
+    kb.button(text="Группа")
+    kb.button(text="Начать игру")
+    kb.adjust(2)
     return kb.as_markup(resize_keyboard=True)

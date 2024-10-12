@@ -16,9 +16,14 @@ logger = logging.getLogger(__name__)
 
 @group_router.callback_query(F.data == "create_group")
 async def create_group(callback: CallbackQuery):
-    await callback.message.answer("create_group")
+    await callback.message.answer(engine.render_template("create_group"))
 
 
 @group_router.callback_query(F.data == "join_group")
 async def join_group(callback: CallbackQuery):
     await callback.message.answer("join_group")
+
+
+@group_router.message(F.text.casefold() == "группа")
+async def join_group(message: Message, state: FSMContext):
+    await message.answer("Твои группы:")
