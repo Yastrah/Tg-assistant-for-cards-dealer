@@ -8,11 +8,11 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 
-from bot.handlers import include_all_routers
+from bot.routers import include_all_routers
 from bot.config import settings
 
 
-VERSION = "1.0.6"
+VERSION = "1.0.7"
 load_dotenv(find_dotenv())
 
 logger = logging.getLogger(__name__)
