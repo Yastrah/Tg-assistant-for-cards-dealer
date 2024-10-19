@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 async def read_data(file_path) -> list[dict]:
+    file_path = f"../data/{file_path}.json"
     try:
         async with aiofiles.open(file_path, mode='r') as file:
             data = json.loads(await file.read())
@@ -21,6 +22,7 @@ async def read_data(file_path) -> list[dict]:
         return None
 
 async def write_data(file_path, data) -> bool:
+    file_path = f"../data/{file_path}.json"
     try:
         async with aiofiles.open(file_path, mode='w') as file:
             await file.write(json.dumps(data, indent=4))

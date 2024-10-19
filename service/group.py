@@ -18,18 +18,19 @@ def generate_id(length=5):
     #             return id
 
 
-async def create_group(name: str, owner_id: int) -> bool:
+async def create_group(name: str, owner_id: int) -> str:
     try:
-        data = await read_data("data/groups.json")
+        data = await read_data("groups")
+        id = generate_id()
         data.append(dict(
             name=name,
             owner_id=owner_id,
-            group_id=generate_id(),
+            group_id=id,
             members=[owner_id]
         ))
-        await write_data("data/groups.json", data)
-        return True
+        await write_data("groups", data)
+        return id
     except:
-        return False
+        return None
 
 
