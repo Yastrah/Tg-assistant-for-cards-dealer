@@ -16,7 +16,11 @@ from aiogram.types import (
 
 
 # название конкретного состояние соответствует ожидаемому ответу при этом состоянии
-class GroupCreate(StatesGroup):
-    name = State()
+class RoomCreate(StatesGroup):
+    get_name = State()
+
+
+class RoomJoin(StatesGroup):
+    get_id = State()
 
 

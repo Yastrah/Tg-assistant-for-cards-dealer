@@ -18,17 +18,17 @@ def generate_id(length=5):
     #             return id
 
 
-async def create_group(name: str, owner_id: int) -> str:
+async def create_room(name: str, owner_id: int) -> str:
     try:
-        data = await read_data("groups")
+        data = await read_data("rooms")
         id = generate_id()
         data.append(dict(
             name=name,
             owner_id=owner_id,
-            group_id=id,
+            room_id=id,
             members=[owner_id]
         ))
-        await write_data("groups", data)
+        await write_data("rooms", data)
         return id
     except:
         return None
